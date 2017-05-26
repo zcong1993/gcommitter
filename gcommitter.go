@@ -10,7 +10,7 @@ import (
 
 func checkOut(out []byte) {
 	if string(out) != "" {
-		log.Fatal(out)
+		log.Fatal(string(out))
 	}
 }
 
