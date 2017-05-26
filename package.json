@@ -1,0 +1,14 @@
+{
+  "name": "gcommitter",
+  "version": "0.0.0",
+  "description": "Easy way of git commit and push",
+  "repository": {
+    "url": "zcong1993/gcommitter",
+    "type": "git"
+  },
+  "scripts": {
+    "test": "echo no test!"
+  },
+  "author": "zcong1993 <1005997919@qq.com>",
+  "license": "MIT"
+}
