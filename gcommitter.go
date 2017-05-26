@@ -42,7 +42,6 @@ func main() {
 	if msg == "" {
 		msg = "backup"
 	}
-	fmt.Println(*help, *push, msg)
 	out, err := excmd("git", "status", "--porcelain")
 	checkErr(err)
 	if string(out) == "" {
@@ -57,7 +56,7 @@ func main() {
 	if *push {
 		out, err = excmd("git", "push")
 		checkErr(err)
-		//fmt.Println(out)
+		fmt.Println(out)
 	}
 	fmt.Println("all done!")
 }
