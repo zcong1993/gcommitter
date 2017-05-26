@@ -10,7 +10,7 @@ just `git add -A && git commit -m "msg" && git push` in one command
 # in your work folder
 $ gcomitter [flag] [commit msg]
 # example
-$ gcomitter init
+$ gcomitter init # default msg is "backup"
 # commit and push
 $ gcomitter -p init
 ```
