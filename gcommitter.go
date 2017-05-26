@@ -56,7 +56,7 @@ func main() {
 	if *push {
 		out, err = excmd("git", "push")
 		checkErr(err)
-		fmt.Println(out)
+		fmt.Printf("%s\n", out)
 	}
 	fmt.Println("all done!")
 }
