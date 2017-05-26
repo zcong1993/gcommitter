@@ -17,6 +17,14 @@ $ gcomitter -p init
 
 ## Build:
 
+```bash
+$ git clone https://github.com/zcong1993/gcommitter.git
+$ cd gcomitter
+$ go install
+$ go build gcomitter.go
+# then move the output to your `$PATH` folder.
+```
+
 ## License
 
 MIT &copy; zcong1993
