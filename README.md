@@ -5,7 +5,7 @@
 just `git add -A && git commit -m "msg" && git push` in one command
 
 ## Usage:
-> download the package, put in any `$PATH` folder.
+> [download](https://github.com/zcong1993/gcommitter/releases) the package, put in any `$PATH` folder.
 ```bash
 # in your work folder
 $ gcomitter [flag] [commit msg]
