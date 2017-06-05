@@ -3,10 +3,13 @@ package main
 import "fmt"
 
 const (
-	AppName = "gcommitter"
+	// AppName is the cli name
+	AppName    = "gcommitter"
+	// AppVersion is current version of cli
 	AppVersion = "0.1.0"
 )
 
+// Version show the cli's current version
 func Version() string {
 	return fmt.Sprintf("\n%s %s.\nCopyright (c) 2017, zcong1993.", AppName, AppVersion)
 }
