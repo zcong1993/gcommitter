@@ -23,8 +23,8 @@ $ gcomitter -p init
 ```bash
 $ git clone https://github.com/zcong1993/gcommitter.git
 $ cd gcomitter
-$ go install
-$ go build gcomitter.go
+# build
+$ go build ./...
 # then move the output to your `$PATH` folder.
 ```
 
