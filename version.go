@@ -8,9 +8,5 @@ const (
 )
 
 func Version() string {
-	return fmt.Sprintf("%s %s.\nCopyright (c) 2017, zcong1993.", AppName, AppVersion)
-}
-
-func Test() {
-	fmt.Println("xsxs")
+	return fmt.Sprintf("\n%s %s.\nCopyright (c) 2017, zcong1993.", AppName, AppVersion)
 }

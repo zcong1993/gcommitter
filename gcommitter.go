@@ -43,7 +43,7 @@ func main() {
 		return
 	}
 	if *version {
-		fmt.Println("xsxs")
+		fmt.Println(Version())
 		return
 	}
 	msg := strings.Join(flag.Args(), " ")
