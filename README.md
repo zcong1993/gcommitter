@@ -1,4 +1,7 @@
-# gcommitter [![wercker status](https://app.wercker.com/status/a05e0a4c35ad0641d25d05bc685b2b2d/s/master "wercker status")](https://app.wercker.com/project/byKey/a05e0a4c35ad0641d25d05bc685b2b2d)
+# gcommitter 
+
+[![Wercker](https://img.shields.io/wercker/ci/wercker/docs.svg?style=flat-square)](https://app.wercker.com/project/byKey/a05e0a4c35ad0641d25d05bc685b2b2d)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zcong1993/gcommitter)](https://goreportcard.com/report/github.com/zcong1993/gcommitter)
 
 > Easy way of git commit and push
 
