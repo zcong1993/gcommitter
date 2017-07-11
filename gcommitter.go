@@ -6,6 +6,7 @@ import (
 	"log"
 	"os/exec"
 	"strings"
+	"os"
 )
 
 // checkOut is a helper function check if out is not nil
@@ -33,22 +34,34 @@ func excmd(name string, arg ...string) ([]byte, error) {
 }
 
 func main() {
-	help := flag.Bool("h", false, "show help")
-	version := flag.Bool("v", false, "show version")
-	push := flag.Bool("p", false, "commit and push")
+	var help, version, push bool
+	var tag string
+	flag.BoolVar(&help, "h", false, "show help")
+	flag.BoolVar(&version, "v", false, "show version")
+	flag.BoolVar(&push, "p", false, "commit and push")
+	flag.StringVar(&tag, "t", "", "add and push tag")
 	flag.Parse()
-	if *help {
+	if help {
 		fmt.Println("\nUsage :\tgcommitter [flag] [commit msg]")
 		fmt.Println("\nFlag :\t-p, --p, \tcommit and push")
 		return
 	}
-	if *version {
+	if version {
 		fmt.Println(Version())
 		return
 	}
 	msg := strings.Join(flag.Args(), " ")
 	if msg == "" {
 		msg = "backup"
+	}
+	if tag != "" {
+		out, err := excmd("git", "tag", "-a", tag, "-m", msg)
+		checkErr(err)
+		checkOut(out)
+		out, err = excmd("git", "push", "origin", tag)
+		checkErr(err)
+		checkOut(out)
+		os.Exit(0)
 	}
 	out, err := excmd("git", "status", "--porcelain")
 	checkErr(err)
@@ -61,7 +74,7 @@ func main() {
 	out, err = excmd("git", "commit", "-m", msg, "--quiet")
 	checkErr(err)
 	checkOut(out)
-	if *push {
+	if push {
 		out, err = excmd("git", "push")
 		checkErr(err)
 		fmt.Printf("%s\n", out)
