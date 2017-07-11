@@ -42,13 +42,12 @@ func main() {
 	flag.StringVar(&tag, "t", "", "add and push tag")
 	flag.Parse()
 	if help {
-		fmt.Println("\nUsage :\tgcommitter [flag] [commit msg]")
-		fmt.Println("\nFlag :\t-p, --p, \tcommit and push")
-		return
+		showHelp()
+		os.Exit(0)
 	}
 	if version {
 		fmt.Println(Version())
-		return
+		os.Exit(0)
 	}
 	msg := strings.Join(flag.Args(), " ")
 	if msg == "" {
@@ -61,6 +60,11 @@ func main() {
 		out, err = excmd("git", "push", "origin", tag)
 		checkErr(err)
 		checkOut(out)
+		if push {
+			out, err = excmd("git", "push")
+			checkErr(err)
+			fmt.Printf("%s\n", out)
+		}
 		os.Exit(0)
 	}
 	out, err := excmd("git", "status", "--porcelain")
@@ -80,4 +84,16 @@ func main() {
 		fmt.Printf("%s\n", out)
 	}
 	fmt.Println("all done!")
+}
+
+func showHelp() {
+	helpText := `
+Usage :
+	gct [flag] [commit msg]
+
+Options:
+	-p, --p 		commit and push
+	-t=tag				run as this 'git tag -a [tag] -m [msg] && git push origin [tag]'
+`
+	fmt.Println(helpText)
 }
