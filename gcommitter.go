@@ -59,7 +59,7 @@ func main() {
 		checkOut(out)
 		out, err = excmd("git", "push", "origin", tag)
 		checkErr(err)
-		checkOut(out)
+		fmt.Printf("%s\n", out)
 		if push {
 			out, err = excmd("git", "push")
 			checkErr(err)
