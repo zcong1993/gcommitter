@@ -1,6 +1,6 @@
-# gcommitter 
+# gcommitter
 
-[![Wercker](https://img.shields.io/wercker/ci/wercker/docs.svg?style=flat-square)](https://app.wercker.com/project/byKey/a05e0a4c35ad0641d25d05bc685b2b2d)
+[![CircleCI](https://circleci.com/gh/zcong1993/gcommitter/tree/master.svg?style=svg)](https://circleci.com/gh/zcong1993/gcommitter/tree/master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zcong1993/gcommitter)](https://goreportcard.com/report/github.com/zcong1993/gcommitter)
 
 > Easy way of git commit and push
