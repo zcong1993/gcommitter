@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
-	"os"
 )
 
 // checkOut is a helper function check if out is not nil
