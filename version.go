@@ -5,7 +5,7 @@ import "fmt"
 var (
 	// AppName is the cli name
 	AppName = "gcommitter"
-	version = "1.0.2"
+	version = "2.0.0"
 )
 
 // Version show the cli's current version
