@@ -28,7 +28,7 @@ func checkOut(out []byte) {
 // checkErr is a helper function panic err if err is not nil
 func checkErr(err error, out []byte) {
 	if err != nil {
-		log.Fatal("error: ", err, string(out))
+		log.Fatalf("error: %s\n, %s", err.Error(), string(out))
 	}
 }
 
