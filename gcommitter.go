@@ -56,7 +56,7 @@ func expectEmpty(out []byte, err error) {
 	str := string(out)
 	if str != "" {
 		if isLintStageOut(str) {
-			info("", str)
+			info("output", str)
 			return
 		}
 		showErr("output un empty", str)
@@ -65,7 +65,7 @@ func expectEmpty(out []byte, err error) {
 
 func showOut(out []byte, err error) {
 	checkErr(err, out)
-	info("", string(out))
+	info("output", string(out))
 }
 
 func main() {
