@@ -22,12 +22,12 @@ var (
 func info(infoMsg string, msg ...string) {
 	green := color.New(color.FgGreen, color.Bold).SprintfFunc()
 	greenNoBold := color.New(color.FgGreen).SprintfFunc()
-	fmt.Printf("%s %s\n%s\n\n", green("INFO"), greenNoBold(infoMsg), strings.Join(msg, "\n"))
+	fmt.Printf("%s %s\n%s\n", green("INFO"), greenNoBold(infoMsg), strings.Join(msg, "\n"))
 }
 
 func showErr(errMsg string, msg ...string) {
 	red := color.New(color.FgRed, color.Bold).SprintfFunc()
-	fmt.Printf("%s %s\n%s\n\n", red("ERROR"), errMsg, strings.Join(msg, "\n"))
+	fmt.Printf("%s %s\n%s\n", red("ERROR"), errMsg, strings.Join(msg, "\n"))
 }
 
 func isLintStageOut(out string) bool {
