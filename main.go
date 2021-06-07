@@ -105,7 +105,7 @@ func main() {
 		os.Exit(1)
 	}
 	expectEmpty(excmd("git", "add", "-A"))
-	expectEmpty(excmd("git", "commit", "-m", msg, "--quiet"))
+	expectEmpty(excmd("git", "commit", "--quiet", "-m", msg))
 	if push {
 		showOut(excmd("git", "push"))
 	}
