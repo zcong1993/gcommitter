@@ -81,14 +81,18 @@ func main() {
 		showHelp()
 		os.Exit(0)
 	}
+
 	if showVersion {
 		fmt.Println(buildVersion(version, commit, date, builtBy))
 		os.Exit(0)
 	}
+
 	msg := strings.Join(flag.Args(), " ")
 	if msg == "" {
-		msg = "backup"
+		showErr("commit message is required")
+		os.Exit(1)
 	}
+
 	if tag != "" {
 		expectEmpty(excmd("git", "tag", "-a", tag, "-m", msg))
 		showOut(excmd("git", "push", "origin", tag))
