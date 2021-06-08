@@ -1,6 +1,6 @@
 builds:
   - main: main.go
-    binary: gct
+    binary: gcommitter
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
     goos:
       - windows
@@ -23,4 +23,4 @@ brews:
     homepage: https://github.com/zcong1993/gcommitter
     description: Easy way of git commit and push
     test: |
-      system "#{bin}/gct -v"
+      system "#{bin}/gcommitter -v"
