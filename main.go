@@ -1,7 +1,7 @@
 package main
 
 import (
-	"flag"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/urfave/cli/v2"
 )
 
 // nolint: gochecknoglobals
@@ -69,44 +70,61 @@ func showOut(out []byte, err error) {
 }
 
 func main() {
-	var help, showVersion, push bool
-	var tag string
-	flag.BoolVar(&help, "h", false, "show help")
-	flag.BoolVar(&showVersion, "v", false, "show version")
-	flag.BoolVar(&push, "p", false, "commit and push")
-	flag.StringVar(&tag, "t", "", "add and push tag")
-	flag.Parse()
-
-	if help {
-		showHelp()
-		os.Exit(0)
+	app := &cli.App{
+		Name:        "gcommitter",
+		UsageText:   "gcommitter [options] [commit messages...]",
+		Description: "Git add + commit + push",
+		Version:     buildVersion(version, commit, date, builtBy),
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "push",
+				Aliases: []string{"p"},
+				Usage:   "if push",
+			},
+			&cli.StringFlag{
+				Name:    "tag",
+				Aliases: []string{"t"},
+				Usage:   "add tag",
+			},
+		},
+		Action: func(c *cli.Context) error {
+			msg := strings.Join(c.Args().Slice(), " ")
+			return process(msg, c.String("tag"), c.Bool("push"))
+		},
 	}
 
-	if showVersion {
-		fmt.Println(buildVersion(version, commit, date, builtBy))
-		os.Exit(0)
-	}
-
-	msg := strings.Join(flag.Args(), " ")
-	if msg == "" {
-		showErr("commit message is required")
+	err := app.Run(os.Args)
+	if err != nil {
+		showErr(err.Error())
 		os.Exit(1)
 	}
+}
 
+func process(msg, tag string, push bool) error {
 	if tag != "" {
-		expectEmpty(excmd("git", "tag", "-a", tag, "-m", msg))
+		args := []string{"tag"}
+
+		if msg != "" {
+			args = append(args, "-a", tag, "-m", msg)
+		} else {
+			args = append(args, tag)
+		}
+		expectEmpty(excmd("git", args...))
 		showOut(excmd("git", "push", "origin", tag))
 		if push {
 			showOut(excmd("git", "push"))
 		}
-		os.Exit(0)
+		return nil
+	}
+
+	if msg == "" {
+		return errors.New("commit message is required")
 	}
 
 	out, err := excmd("git", "status", "--porcelain")
 	checkErr(err, out)
 	if string(out) == "" {
-		showErr("nothing to commit, working tree clean")
-		os.Exit(1)
+		return errors.New("nothing to commit, working tree clean")
 	}
 	expectEmpty(excmd("git", "add", "-A"))
 	expectEmpty(excmd("git", "commit", "--quiet", "-m", msg))
@@ -114,18 +132,7 @@ func main() {
 		showOut(excmd("git", "push"))
 	}
 	info("all done!")
-}
-
-func showHelp() {
-	helpText := `
-Usage :
-	gct [flag] [commit msg]
-
-Options:
-	-p, --p 		commit and push
-	-t=tag				run as this 'git tag -a [tag] -m [msg] && git push origin [tag]'
-`
-	fmt.Println(helpText)
+	return nil
 }
 
 func buildVersion(version, commit, date, builtBy string) string {
