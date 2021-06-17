@@ -31,12 +31,8 @@ func showErr(errMsg string, msg ...string) {
 	fmt.Printf("%s %s\n%s\n", red("ERROR"), errMsg, strings.Join(msg, "\n"))
 }
 
-func isLintStageOut(out string) bool {
-	return strings.Contains(out, "lint-staged")
-}
-
 // checkErr is a helper function panic err if err is not nil.
-func checkErr(err error, out []byte) {
+func checkErr(out []byte, err error) {
 	if err != nil {
 		showErr(err.Error(), string(out))
 		os.Exit(1)
@@ -51,20 +47,15 @@ func excmd(name string, arg ...string) ([]byte, error) {
 }
 
 func expectEmpty(out []byte, err error) {
-	checkErr(err, out)
+	checkErr(out, err)
 
-	str := string(out)
-	if str != "" {
-		if isLintStageOut(str) {
-			info("output", str)
-			return
-		}
+	if str := string(out); str != "" {
 		showErr("output un empty", str)
 	}
 }
 
 func showOut(out []byte, err error) {
-	checkErr(err, out)
+	checkErr(out, err)
 	info("output", string(out))
 }
 
@@ -120,12 +111,12 @@ func process(msg, tag string, push bool) error {
 	}
 
 	out, err := excmd("git", "status", "--porcelain")
-	checkErr(err, out)
+	checkErr(out, err)
 	if string(out) == "" {
 		return errors.New("nothing to commit, working tree clean")
 	}
 	expectEmpty(excmd("git", "add", "-A"))
-	expectEmpty(excmd("git", "commit", "--quiet", "-m", msg))
+	showOut(excmd("git", "commit", "--quiet", "-m", msg))
 	if push {
 		showOut(excmd("git", "push"))
 	}
