@@ -35,16 +35,15 @@ func isLintStageOut(out string) bool {
 	return strings.Contains(out, "lint-staged")
 }
 
-// checkErr is a helper function panic err if err is not nil
+// checkErr is a helper function panic err if err is not nil.
 func checkErr(err error, out []byte) {
-	str := string(out)
 	if err != nil {
-		showErr(err.Error(), str)
+		showErr(err.Error(), string(out))
 		os.Exit(1)
 	}
 }
 
-// excmd is a helper function execute cmd and return a combined output
+// excmd is a helper function execute cmd and return a combined output.
 func excmd(name string, arg ...string) ([]byte, error) {
 	info(fmt.Sprintf("%s %s", name, strings.Join(arg, " ")))
 	cmd := exec.Command(name, arg...)
@@ -93,8 +92,7 @@ func main() {
 		},
 	}
 
-	err := app.Run(os.Args)
-	if err != nil {
+	if err := app.Run(os.Args); err != nil {
 		showErr(err.Error())
 		os.Exit(1)
 	}
