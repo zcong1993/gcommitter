@@ -8,8 +8,9 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"
 )
 
 // nolint: gochecknoglobals
@@ -60,30 +61,29 @@ func showOut(out []byte, err error) {
 }
 
 func main() {
-	app := &cli.App{
-		Name:        "gcommitter",
-		UsageText:   "gcommitter [options] [commit messages...]",
-		Description: "Git add + commit + push",
-		Version:     buildVersion(version, commit, date, builtBy),
-		Flags: []cli.Flag{
-			&cli.BoolFlag{
-				Name:    "push",
-				Aliases: []string{"p"},
-				Usage:   "if push",
-			},
-			&cli.StringFlag{
-				Name:    "tag",
-				Aliases: []string{"t"},
-				Usage:   "add tag",
-			},
-		},
-		Action: func(c *cli.Context) error {
-			msg := strings.Join(c.Args().Slice(), " ")
-			return process(msg, c.String("tag"), c.Bool("push"))
+	var (
+		push bool
+		tag  string
+	)
+
+	app := &cobra.Command{
+		Use:     "gcommitter",
+		Short:   "Git add + commit + push",
+		Version: buildVersion(version, commit, date, builtBy),
+		Args:    cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			msg := strings.Join(args, " ")
+			if err := process(msg, tag, push); err != nil {
+				showErr(err.Error())
+				os.Exit(1)
+			}
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	app.Flags().BoolVarP(&push, "push", "p", false, "if push")
+	app.Flags().StringVarP(&tag, "tag", "t", "", "add tag")
+
+	if err := app.Execute(); err != nil {
 		showErr(err.Error())
 		os.Exit(1)
 	}
