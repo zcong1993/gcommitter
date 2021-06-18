@@ -70,7 +70,6 @@ func main() {
 		Use:     "gcommitter",
 		Short:   "Git add + commit + push",
 		Version: buildVersion(version, commit, date, builtBy),
-		Args:    cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			msg := strings.Join(args, " ")
 			if err := process(msg, tag, push); err != nil {
