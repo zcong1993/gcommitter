@@ -62,8 +62,9 @@ func showOut(out []byte, err error) {
 
 func main() {
 	var (
-		push bool
-		tag  string
+		push       bool
+		tag        string
+		skipVerify bool
 	)
 
 	app := &cobra.Command{
@@ -72,7 +73,7 @@ func main() {
 		Version: buildVersion(version, commit, date, builtBy),
 		Run: func(cmd *cobra.Command, args []string) {
 			msg := strings.Join(args, " ")
-			if err := process(msg, tag, push); err != nil {
+			if err := process(msg, tag, push, skipVerify); err != nil {
 				showErr(err.Error())
 				os.Exit(1)
 			}
@@ -81,6 +82,7 @@ func main() {
 
 	app.Flags().BoolVarP(&push, "push", "p", false, "if push")
 	app.Flags().StringVarP(&tag, "tag", "t", "", "add tag")
+	app.Flags().BoolVarP(&skipVerify, "no-verify", "s", false, "if skip commit hook")
 
 	if err := app.Execute(); err != nil {
 		showErr(err.Error())
@@ -88,7 +90,7 @@ func main() {
 	}
 }
 
-func process(msg, tag string, push bool) error {
+func process(msg, tag string, push, skipVerify bool) error {
 	if tag != "" {
 		args := []string{"tag"}
 
@@ -115,7 +117,12 @@ func process(msg, tag string, push bool) error {
 		return errors.New("nothing to commit, working tree clean")
 	}
 	expectEmpty(excmd("git", "add", "-A"))
-	showOut(excmd("git", "commit", "--quiet", "-m", msg))
+	commitArgs := []string{"commit", "--quiet"}
+	if skipVerify {
+		commitArgs = append(commitArgs, "--no-verify")
+	}
+	commitArgs = append(commitArgs, "-m", msg)
+	showOut(excmd("git", commitArgs...))
 	if push {
 		showOut(excmd("git", "push"))
 	}
